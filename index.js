@@ -148,10 +148,9 @@ module.exports = {
   },
 
   treeForServiceWorker(swTree, appTree) {
-    console.log('**** SW treeForServiceWorker', !!swTree, !!appTree);
     var options = this._getOptions();
     options.projectVersion = this.project.pkg.version;
-    console.log('**** SW treeForServiceWorker project root', this.project.root);
+
     try {
       options.projectRevision = hashForDep(this.project.root);
     } catch (e) {
