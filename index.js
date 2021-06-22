@@ -76,7 +76,7 @@ module.exports = {
       throw new Error('Could not find initialized ember-service-worker addon. It must be part of your app\'s dependencies!');
     }
 
-    return swAddon._addSW(tree);
+    return swAddon._addServiceWorker(tree);
   },
 
   _addServiceWorker(appTree) {
