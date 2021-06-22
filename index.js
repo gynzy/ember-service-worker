@@ -54,12 +54,34 @@ module.exports = {
   },
 
   postprocessTree(type, appTree) {
-    let options = this._getOptions();
-
-    if (type !== 'all' || options.enabled === false) {
+    if (type !== 'all') {
       return appTree;
     }
+    return this._addServiceWorker(appTree);
+  },
+  
+  /**
+   * This function is *not* called by ember-cli directly, but supposed to be imported by an app to wrap the app's
+   * tree, to add the prerendered HTML files. This workaround is currently needed for Embroider-based builds that
+   * don't support the `postprocessTree('all', tree)` hook used here.
+   * 
+   * Inspired from: https://github.com/ef4/prember/issues/59#issuecomment-723255752
+   */
+   addServiceWorker(app, tree) {
+    let swAddon = app.project.addons.find(({ name }) => name === 'ember-service-worker');
 
+    if (!swAddon) {
+      throw new Error('Could not find initialized ember-service-worker addon. It must be part of your app\'s dependencies!');
+    }
+
+    return swAddon._addServiceWorker(tree);
+  },
+
+  _addServiceWorker(appTree) {
+    let options = this._getOptions();
+    if (options.enabled === false) {
+      return appTree;
+    }
     let plugins = this._findPluginsFor(this.project);
 
     // Add the project itself as a possible plugin, this way user can add custom
@@ -93,7 +115,7 @@ module.exports = {
       serviceWorkerRegistrationTree
     ], { overwrite: true });
   },
-
+  
   contentFor(type, config) {
     let options = this._getOptions();
 
