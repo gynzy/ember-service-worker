@@ -7,8 +7,6 @@ const writeFile = require('broccoli-file-creator');
 const hashForDep = require('hash-for-dep');
 const addonUtils = require('./lib/addon-utils');
 const IndexFile = require('./lib/index-file');
-const Funnel = require('broccoli-funnel');
-const path = require('path');
 
 module.exports = {
   name: 'ember-service-worker',
